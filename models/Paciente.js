@@ -16,9 +16,9 @@ const pacienteSchema = new mongoose.Schema(
         required: true,
         trim: true
       },
-      idade: {},
-        type: Number,
-      
+      idade: {
+        type: Number
+      },
       enderecoCep: {
         type: Number
       },
