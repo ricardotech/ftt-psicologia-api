@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
         type: Date,
         default: Date.now(),
       },
-      name: {
+      nomeCompleto: {
         type: String,
         trim: true,
       },
@@ -16,7 +16,6 @@ const userSchema = new mongoose.Schema(
       role: {
         type: String,
         enum: ["admin", "student", "secretary", "professor"],
-        default: "student"
       },
       matricula: {
         type: Number
