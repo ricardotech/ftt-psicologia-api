@@ -6,7 +6,7 @@ const pacienteSchema = new mongoose.Schema(
         type: Date,
         default: Date.now(),
       },
-      nomeCompleto: {
+      nome: {
         type: String,
         required: true,
         trim: true,
