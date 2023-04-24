@@ -58,10 +58,6 @@ async function create(request: Request, response: Response){
         return response.status(203).send("Senha inválida. Deve possuir mais de 8 caracteres.");
     }
 
-    if (!cpf){
-        return response.status(203).send("CPF inválido.");
-    }
-
     // Verificando se a segunda parte do nome existe:
     if (nome.split(" ")[1]){
         return response.status(203).send("Insira seu nome completo.");
