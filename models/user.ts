@@ -35,16 +35,10 @@ const userSchema = new mongoose.Schema(
       idSecretaria: {
         type: Number
       },
-      password: {
+      senha: {
         type: String,
-        min: 6,
+        min: 8,
         max: 64,
-      },
-      config: {
-        introVisualized: Boolean,
-        default: {
-          introVisualized: false,
-        },
       },
     },
     { timestamps: true }
