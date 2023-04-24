@@ -84,6 +84,12 @@ const pacienteSchema = new mongoose.Schema(
       tratamentoOferecido: {
         type: String
       },
+      config: {
+        introVisualized: Boolean,
+        default: {
+          introVisualized: false,
+        },
+      },
     },
     { timestamps: true }
   );
