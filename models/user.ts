@@ -6,7 +6,7 @@ const userSchema = new mongoose.Schema(
         type: Date,
         default: Date.now(),
       },
-      nomeCompleto: {
+      nome: {
         type: String,
         trim: true,
       },
@@ -39,12 +39,6 @@ const userSchema = new mongoose.Schema(
         type: String,
         min: 6,
         max: 64,
-      },
-      config: {
-        introVisualized: Boolean,
-        default: {
-          introVisualized: false,
-        },
       },
     },
     { timestamps: true }
