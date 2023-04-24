@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
+import User from "../models/User";
+import bcrypt from "bcrypt";
 
-async function create(request: Request, response: Response){
+
+export async function createUser(request: Request, response: Response){
     const {
         nome,
         cpf,
@@ -53,7 +56,6 @@ async function create(request: Request, response: Response){
     if (!senha){
         return response.status(203).send("Senha inválida.");
     }
-
     if (senha.lenght < 8){
         return response.status(203).send("Senha inválida. Deve possuir mais de 8 caracteres.");
     }
@@ -62,4 +64,19 @@ async function create(request: Request, response: Response){
     if (nome.split(" ")[1]){
         return response.status(203).send("Insira seu nome completo.");
     }
+
+    // Criptografia da senha:
+    const senhaEncriptada = await bcrypt.hash(senha, 10);
+
+    // Criação de um novo usuário:
+    const user = await new User({
+        nome: nome
+    })
+
+    // Salvamento do novo usuário no banco de dados:
+    // em andamento
+};
+
+export async function loginUser(request: Request, response: Response) {
+    return response.status(203).send("... Em desenvolvimento ...");
 };
