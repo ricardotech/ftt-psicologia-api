@@ -12,6 +12,7 @@ const userSchema = new mongoose.Schema(
       },
       cpf: {
         type: Number,
+        unique: true
       },
       role: {
         type: String,
@@ -35,7 +36,7 @@ const userSchema = new mongoose.Schema(
       idSecretaria: {
         type: Number
       },
-      password: {
+      senha: {
         type: String,
         min: 6,
         max: 64,
