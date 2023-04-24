@@ -151,14 +151,23 @@ export async function loginUser(request: Request, response: Response) {
 
   const userInDatabaseByCpf = await User.findOne({ cpf }).lean();
 
+  // Vendo se usuário existe no DB:
   if (!userInDatabaseByCpf) {
     return response
         .status(203)
         .send("Não foi possivel encontrar um usuário com esse CPF.");
   }
 
-  const databaseSenhaCriptografada = userInDatabaseByCpf.senha; 
-  const booleanReqSenhaCriptografada = await bcrypt.compare(senha, String(databaseSenhaCriptografada)); // essa senha é a que vem com o req.
+  // Vendo se senha existe no DB:
+  if (!userInDatabaseByCpf.senha) {
+    return response
+        .status(203)
+        .send("erro");
+  }
+
+  const databaseSenhaCriptografada = userInDatabaseByCpf.senha;
+  const booleanReqSenhaCriptografada = await bcrypt.compare(
+    senha, databaseSenhaCriptografada); // 'senha' aqui, é a que vem no request.
 
   // Se a comparação for 'false', retorna senha incorreta.
   if (!booleanReqSenhaCriptografada) {
