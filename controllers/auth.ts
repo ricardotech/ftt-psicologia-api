@@ -17,43 +17,63 @@ export async function createUser(request: Request, response: Response) {
   } = request.body;
 
   if (!nome) {
-    return response.status(203).send("Insira seu nome.");
+    return response
+        .status(203)
+        .send("Insira seu nome.");
   }
 
   if (!cpf) {
-    return response.status(203).send("CPF inválido.");
+    return response
+        .status(203)
+        .send("CPF inválido.");
   }
 
   if (!funcao) {
-    return response.status(203).send("Insira sua função.");
+    return response
+        .status(203)
+        .send("Insira sua função.");
   }
 
   if (!matricula) {
-    return response.status(203).send("Insira sua matrícula.");
+    return response
+        .status(203)
+        .send("Insira sua matrícula.");
   }
 
   if (!periodoCursado) {
-    return response.status(203).send("Insira o periodo sendo cursado.");
+    return response
+        .status(203)
+        .send("Insira o periodo sendo cursado.");
   }
 
   if (!disciplina) {
-    return response.status(203).send("Insira a disciplina.");
+    return response
+        .status(203)
+        .send("Insira a disciplina.");
   }
 
   if (!idOrientador) {
-    return response.status(203).send("Insira o id do orientador.");
+    return response
+        .status(203)
+        .send("Insira o id do orientador.");
   }
 
   if (!disciplinaMinistrada) {
-    return response.status(203).send("Insira a disciplina ministrada.");
+    return response
+        .status(203)
+        .send("Insira a disciplina ministrada.");
   }
 
   if (!idSecretaria) {
-    return response.status(203).send("Insira a id da secretária.");
+    return response
+        .status(203)
+        .send("Insira a id da secretária.");
   }
 
   if (!senha) {
-    return response.status(203).send("Senha inválida.");
+    return response
+        .status(203)
+        .send("Senha inválida.");
   }
 
   if (senha.lenght < 8) {
@@ -64,7 +84,9 @@ export async function createUser(request: Request, response: Response) {
 
   // Verificando se a segunda parte do nome existe:
   if (!nome.split(" ")[1]) {
-    return response.status(203).send("Insira seu nome completo.");
+    return response
+        .status(203)
+        .send("Insira seu nome completo.");
   }
 
   // Criptografia da senha:
@@ -87,25 +109,22 @@ export async function createUser(request: Request, response: Response) {
   // Se já existe um usuário no BD, o sistema para antes de tentar salvar.
   const userInDatabaseByCpf = await User.findOne({ cpf }).lean();
   if (userInDatabaseByCpf?.cpf) {
-    return response.status(203).json({
-      status: "error",
-      message: "Já existe um usuário no BD com esse cpf.",
-    });
+    return response
+        .status(203)
+        .send("Já existe um usuário no BD com esse cpf.");
   }
 
   // Salvamento do novo usuário no banco de dados:
   try {
     await user.save();
-    return response.status(200).json({
-      status: "success",
-      message: "Usuário criado com sucesso.",
-    });
+    return response
+        .status(200)
+        .send("Usuário criado com sucesso.");
   } catch (e) {
     console.error(e);
-    return response.status(203).json({
-      status: "error",
-      message: "Não foi possivel criar usuário.",
-    });
+    return response
+        .status(203)
+        .send("Não foi possivel criar usuário.");
   }
 }
 
@@ -113,38 +132,43 @@ export async function loginUser(request: Request, response: Response) {
   const { cpf, senha } = request.body;
 
   if (!cpf) {
-    return response.status(203).send("CPF inválido.");
+    return response
+        .status(203)
+        .send("CPF inválido.");
   }
 
   if (!senha) {
-    return response.status(203).send("Senha inválida.");
+    return response
+        .status(203)
+        .send("Senha inválida.");
   }
 
-  // if (senha.lenght < 8){
-  //     return response.status(203).send("Senha inválida. Deve possuir mais de 8 caracteres.");
-  // }
+  if (senha.lenght < 8){
+      return response
+        .status(203)
+        .send("Senha inválida. Deve possuir mais de 8 caracteres.");
+  }
 
   const userInDatabaseByCpf = await User.findOne({ cpf }).lean();
 
   if (!userInDatabaseByCpf) {
-    return response.status(203).send("Não foi possivel encontrar um usuário com esse CPF.");
+    return response
+        .status(203)
+        .send("Não foi possivel encontrar um usuário com esse CPF.");
   }
 
-  
   const databaseSenhaCriptografada = userInDatabaseByCpf.senha; 
   const booleanReqSenhaCriptografada = await bcrypt.compare(senha, String(databaseSenhaCriptografada)); // essa senha é a que vem com o req.
 
   // Se a comparação for 'false', retorna senha incorreta.
   if (!booleanReqSenhaCriptografada) {
-    return response.status(203).send("Senha incorreta.");
+    return response
+        .status(203)
+        .send("Senha incorreta.");
   }
 
+  // Se comparação for 'true', retorna que pode acessar o sistema.
   return response
     .status(200)
     .send("Login feito com sucesso. Usuário pode acessar o sistema.");
-
-  // // Se o CPF que o usuário inseriu, existir no BD, compara as senhas.
-  // if (userInDatabaseByCpf){
-
-  // }
 }
