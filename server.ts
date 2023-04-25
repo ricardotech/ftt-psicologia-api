@@ -7,6 +7,24 @@ const authRoutes = require("./routes/auth");
 const app = express();
 const port = 3000;
 
+// Variáveis da documentação
+const swaggerJsDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
+const swaggerOptions = {
+    swaggerDefinition: {
+        info: {
+            title: 'API-Psicologia-FTT',
+            version: '1.0.0',
+            description: 'API do sistema para o curso de Psicologia da UniEvangélica',
+        },
+    },
+    apis: ['server.ts','./routes/*.ts'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
 // Valores de acesso em .env:
 const user = process.env.DB_USER
 const password = process.env.DB_PASSWORD
