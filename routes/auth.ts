@@ -15,45 +15,56 @@ import {
  *        description: Nome do usuário
  *        in: formData
  *        type: string
+ *        example: Fulano de Ciclano
  *      - name: cpf
  *        description: CPF do usuário
  *        in: formData
  *        type: integer
+ *        example: 12345678912
  *      - name: funcao
  *        description: Função que o usuário exerce
  *        in: formData
  *        type: string
+ *        example: Estudante
  *      - name: matricula
  *        description: Número de matrícula do usuário
  *        in: formData
  *        type: integer
+ *        example: 1234567
  *      - name: periodoCursado
  *        description: Período cursado pelo usuário
  *        in: formData
  *        type: integer
+ *        example: 4
  *      - name: disciplina
  *        description: Disciplina cursada pelo usuário
  *        in: formData
  *        type: string
+ *        example: Cidadania, ética e espiritualidade
  *      - name: idOrientador
  *        description: Identificação do orientador
  *        in: formData
  *        type: integer
+ *        example: 1234567
  *      - name: disciplinaMinistrada
  *        description: Disciplina ministrada pelo orientador
  *        in: formData
  *        type: string
+ *        example: Cidadania, ética e espiritualidade
  *      - name: idSecretaria
  *        description: Identificação da secretária
  *        in: formData
  *        type: integer
+ *        example: 1234567
  *      - name: senha
  *        description: Senha do usuário
  *        in: formData
- *        type: integer
+ *        type: string
  *      responses:
- *        201:
+ *        200:
  *          description: Usuário criado com sucesso.
+ *        203:
+ *          description: Não foi possível criar usuário.
  *        
  * 
  */
@@ -68,10 +79,11 @@ router.post("/register", createUser);
  *    - name: cpf
  *      description: CPF do usuário
  *      in: formData
+ *      type: integer
  *    - name: senha
  *      description: Senha do usuário
  *      in: formData
- *      type: integer
+ *      type: string
  *    responses:
  *      200:
  *        description: Login realizado com sucesso
