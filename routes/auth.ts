@@ -21,7 +21,7 @@ import {
  *        in: formData
  *        type: integer
  *        example: 12345678912
- *      - name: funcao
+ *      - name: role
  *        description: Função que o usuário exerce
  *        in: formData
  *        type: string
