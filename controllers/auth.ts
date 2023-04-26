@@ -6,7 +6,7 @@ export async function createUser(request: Request, response: Response) {
   const {
     nome,
     cpf,
-    funcao,
+    role,
     matricula,
     periodoCursado,
     disciplina,
@@ -28,7 +28,7 @@ export async function createUser(request: Request, response: Response) {
         .send("CPF inválido.");
   }
 
-  if (!funcao) {
+  if (!role) {
     return response
         .status(203)
         .send("Insira sua função.");
@@ -96,7 +96,7 @@ export async function createUser(request: Request, response: Response) {
   const user = await new User({
     nome,
     cpf,
-    funcao,
+    role,
     matricula,
     periodoCursado,
     disciplina,
