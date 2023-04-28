@@ -9,6 +9,7 @@ const userSchema = new mongoose.Schema(
       nome: {
         type: String,
         trim: true,
+        lowercase: true
       },
       cpf: {
         type: Number,
@@ -33,13 +34,17 @@ const userSchema = new mongoose.Schema(
       disciplinaMinistrada: {
         type: String
       },
-      idSecretaria: {
+      email: {
+        type: String,
+        lowercase: true
+      },
+      telefone: {
         type: Number
       },
       senha: {
         type: String,
-        min: 6,
-        max: 64,
+        min: 8,
+        max: 20,
       },
     },
     { timestamps: true }

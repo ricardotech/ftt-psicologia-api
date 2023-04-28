@@ -12,81 +12,91 @@ export async function createUser(request: Request, response: Response) {
     disciplina,
     idOrientador,
     disciplinaMinistrada,
-    idSecretaria,
-    senha,
+    email,
+    telefone,
+    senha
   } = request.body;
 
   if (!nome) {
-    return response
-        .status(203)
-        .send("Insira seu nome.");
+    return response.status(203).send("Insira seu nome.");
   }
 
   if (!cpf) {
-    return response
-        .status(203)
-        .send("CPF inválido.");
+    return response.status(203).send("CPF inválido.");
+  }
+
+  if (!email) {
+    return response.status(203).send("email inválido.");
+  }
+
+  if (!telefone) {
+    return response.status(203).send("Telefone inválido.");
   }
 
   if (!role) {
-    return response
-        .status(203)
-        .send("Insira sua função.");
+    return response.status(203).send("Insira sua função.");
   }
 
-  if (!matricula) {
-    return response
-        .status(203)
-        .send("Insira sua matrícula.");
+  // Testando se o role no request, está entre os possiveis:
+  const possibleRoles = ["admin", "student", "secretary", "professor"];
+  if (!possibleRoles.includes(role)) {
+    return response.status(203).send("O role/cargo/função é invalido.");
   }
 
-  if (!periodoCursado) {
-    return response
-        .status(203)
-        .send("Insira o periodo sendo cursado.");
+  // Validação admin:
+  if (role === "admin") {
+    if (!email) {
+      return response.status(203).send("Insira o email para o admin.");
+    }
   }
 
-  if (!disciplina) {
-    return response
-        .status(203)
-        .send("Insira a disciplina.");
+  // Validação para aluno:
+  if (role === "student") {
+    if (!matricula) {
+      return response.status(203).send("Insira sua matrícula.");
+    }
+
+    if (!periodoCursado) {
+      return response.status(203).send("Insira o periodo sendo cursado.");
+    }
+
+    if (!disciplina) {
+      return response.status(203).send("Insira a disciplina.");
+    }
   }
 
-  if (!idOrientador) {
-    return response
-        .status(203)
-        .send("Insira o id do orientador.");
-  }
+  // Validação professor/orientador:
+  if (role === "professor") {
+    if (!idOrientador) {
+      return response.status(203).send("Insira o id do orientador.");
+    }
 
-  if (!disciplinaMinistrada) {
-    return response
-        .status(203)
-        .send("Insira a disciplina ministrada.");
-  }
-
-  if (!idSecretaria) {
-    return response
-        .status(203)
-        .send("Insira a id da secretária.");
+    if (!disciplinaMinistrada) {
+      return response.status(203).send("Insira a disciplina ministrada.");
+    }
   }
 
   if (!senha) {
-    return response
-        .status(203)
-        .send("Senha inválida.");
+    return response.status(203).send("Senha inválida.");
   }
 
-  if (senha.lenght < 8) {
+  // Validando o comprimento da senha:
+  if (senha.length < 8 || senha.length > 20) {
     return response
       .status(203)
-      .send("Senha inválida. Deve possuir mais de 8 caracteres.");
+      .send("Senha inválida. Deve possuir entre 8 e 20 caracteres.");
+  }
+
+  // Validando o comprimento do CPF:
+  if (String(cpf).length !== 11) {
+    return response
+      .status(203)
+      .send("CPF inválido. Deve possuir 11 caracteres.");
   }
 
   // Verificando se a segunda parte do nome existe:
   if (!nome.split(" ")[1]) {
-    return response
-        .status(203)
-        .send("Insira seu nome completo.");
+    return response.status(203).send("Insira seu nome completo.");
   }
 
   // Criptografia da senha:
@@ -102,7 +112,6 @@ export async function createUser(request: Request, response: Response) {
     disciplina,
     idOrientador,
     disciplinaMinistrada,
-    idSecretaria,
     senha: senhaCriptografada,
   });
 
@@ -110,21 +119,17 @@ export async function createUser(request: Request, response: Response) {
   const userInDatabaseByCpf = await User.findOne({ cpf }).lean();
   if (userInDatabaseByCpf?.cpf) {
     return response
-        .status(203)
-        .send("Já existe um usuário no BD com esse cpf.");
+      .status(203)
+      .send("Já existe um usuário no BD com esse cpf.");
   }
 
   // Salvamento do novo usuário no banco de dados:
   try {
     await user.save();
-    return response
-        .status(200)
-        .send("Usuário criado com sucesso.");
+    return response.status(200).send("Usuário criado com sucesso.");
   } catch (e) {
     console.error(e);
-    return response
-        .status(203)
-        .send("Não foi possivel criar usuário.");
+    return response.status(203).send("Não foi possivel criar usuário.");
   }
 }
 
@@ -146,7 +151,7 @@ export async function loginUser(request: Request, response: Response) {
   if (senha.lenght < 8){
       return response
         .status(203)
-        .send("Senha inválida. Deve possuir mais de 8 caracteres.");
+        .send("Senha inválida. Deve possuir ao menos 8 caracteres.");
   }
 
   const userInDatabaseByCpf = await User.findOne({ cpf }).lean();
@@ -176,7 +181,7 @@ export async function loginUser(request: Request, response: Response) {
         .send("Senha incorreta.");
   }
 
-  // Se comparação for 'true', retorna que pode acessar o sistema.
+  // Se a comparação for 'true', retorna que pode acessar o sistema.
   return response
     .status(200)
     .send("Login feito com sucesso. Usuário pode acessar o sistema.");

@@ -73,22 +73,16 @@ const pacienteSchema = new mongoose.Schema(
       nomePessoaEcaminhamento: {
         type: String
       },
-      funcionarioUnieva: {
+      funcionarioUnievangelica: {
         type: Boolean,
         required: true,
         default: false
       },
-      alunoUnieva: {
+      alunoUnievangelica: {
         type: Boolean
       },
       tratamentoOferecido: {
         type: String
-      },
-      config: {
-        introVisualized: Boolean,
-        default: {
-          introVisualized: false,
-        },
       },
     },
     { timestamps: true }
